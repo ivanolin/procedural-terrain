@@ -47,7 +47,8 @@ public class PerlinNoise {
     public static Vector2 getCornerVector(int x, int y){
         int seed = (x ^ (x >> 16)) << 16 | ((y ^ (y >> 16)) & 0xFFFF);
         Random.seed = seed;
-        Vector2 corner = new Vector2(Random.Range(-1.0f, 1.0f), Random.Range(-1.0f, 1.0f));
+        float angle = Random.Range(0.0f, 2 * Mathf.PI);
+        Vector2 corner = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
         corner.Normalize();
         return corner;
     }
