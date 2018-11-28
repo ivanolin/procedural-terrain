@@ -18,6 +18,7 @@ public class Chunk : MonoBehaviour
     {
         GetComponent<MeshFilter>().mesh = GenerateChunkMesh(testSideLength, testDensity);
         GetComponent<MeshRenderer>().material.mainTexture = GenerateChunkTexture(testSideLength, testDensity);
+        gameObject.AddComponent<MeshCollider>();
     }
 
     /**
@@ -56,7 +57,7 @@ public class Chunk : MonoBehaviour
             {
                 //// Add the current point to vertex data
                 // Get the height value from perlin based on the GLOBAL position of the vertex to add
-				yPosition = PerlinNoise.getHeight(transform.position.x + xPosition, transform.position.z + zPosition) * 2;
+				yPosition = PerlinNoise.getHeightTest(transform.position.x + xPosition, transform.position.z + zPosition) * 2;
                 vertices[verticesIndex] = new Vector3(xPosition, yPosition, zPosition);
                 uvs[verticesIndex] = new Vector2(xPosition / sideLength, zPosition / sideLength);
 
@@ -129,9 +130,9 @@ public class Chunk : MonoBehaviour
             for (int x = 0; x < vertexDensity - 1; x++)
             {
                 // Get the perlin value of a vertex touching this pixel
-				float yValue = PerlinNoise.getHeight(transform.position.x + xPosition, transform.position.z + zPosition);
+				float yValue = PerlinNoise.getHeightTest(transform.position.x + xPosition, transform.position.z + zPosition);
                 // Set color based on perlin value
-				chunkTexture.SetPixel(x, z, Color.Lerp(testLowColor, testHighColor, yValue*4));
+				chunkTexture.SetPixel(x, z, Color.Lerp(testLowColor, testHighColor, yValue));
 
 				xPosition += vertexSpace;
             }
@@ -143,7 +144,7 @@ public class Chunk : MonoBehaviour
 		chunkTexture.Apply();
 
         // Uncomment this line to disable texture blurring
-		//chunkTexture.filterMode = FilterMode.Point;
+		chunkTexture.filterMode = FilterMode.Point;
 
         // This line disables wrapping
         chunkTexture.wrapMode = TextureWrapMode.Clamp;

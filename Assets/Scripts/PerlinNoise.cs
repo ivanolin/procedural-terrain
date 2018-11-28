@@ -4,6 +4,15 @@ using UnityEngine;
 
 public class PerlinNoise {
 
+    // meme octave method
+    public static float getHeightTest(float x, float z)
+    {
+        float height1 = getHeight(x, z);
+        float height2 = getHeight(x/80, z/80) * 30;
+
+        return height1 + height2;
+    }
+
     public static float getHeight(float x, float z){
 
         //x /= 1;
