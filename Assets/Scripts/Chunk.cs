@@ -13,12 +13,31 @@ public class Chunk : MonoBehaviour
 	public Color testLowColor;
 	public Color testHighColor;
 
+    private Mesh HighDetailMesh;
+    private Mesh LowDetailMesh;
+
     // Use this for testing
-    void Start()
+    public void Load()
     {
-        GetComponent<MeshFilter>().mesh = GenerateChunkMesh(testSideLength, testDensity);
+        //GetComponent<MeshFilter>().mesh = GenerateChunkMesh(testSideLength, testDensity);
+        HighDetailMesh = GenerateChunkMesh(testSideLength, testDensity);
+        LowDetailMesh = GenerateChunkMesh(testSideLength, testDensity/4);
+
+        GetComponent<MeshFilter>().mesh = LowDetailMesh;
         GetComponent<MeshRenderer>().material.mainTexture = GenerateChunkTexture(testSideLength, testDensity);
         gameObject.AddComponent<MeshCollider>();
+    }
+
+    public void SetLOD(bool high)
+    {
+        if(high)
+        {
+            GetComponent<MeshFilter>().mesh = HighDetailMesh;
+        }
+        else
+        {
+            GetComponent<MeshFilter>().mesh = LowDetailMesh;
+        }
     }
 
     /**
