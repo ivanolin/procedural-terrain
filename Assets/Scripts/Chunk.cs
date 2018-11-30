@@ -12,9 +12,14 @@ public class Chunk : MonoBehaviour
     public int testDensity;
 	public Color testLowColor;
 	public Color testHighColor;
+    public Color desertColor;
+    public Color snowColor;
+    public Color grassColor;
+    public Color rockColor;
 
     private Mesh HighDetailMesh;
     private Mesh LowDetailMesh;
+
 
     // Use this for testing
     public void Load()
@@ -76,7 +81,8 @@ public class Chunk : MonoBehaviour
             {
                 //// Add the current point to vertex data
                 // Get the height value from perlin based on the GLOBAL position of the vertex to add
-				yPosition = PerlinNoise.getHeightTest(transform.position.x + xPosition, transform.position.z + zPosition) * 2;
+                float moisture = PerlinNoise.getMoisture(transform.position.x + xPosition, transform.position.z + zPosition);
+				yPosition = PerlinNoise.getHeightTest(transform.position.x + xPosition, transform.position.z + zPosition) * 2.0f;
                 vertices[verticesIndex] = new Vector3(xPosition, yPosition, zPosition);
                 uvs[verticesIndex] = new Vector2(xPosition / sideLength, zPosition / sideLength);
 
@@ -150,8 +156,21 @@ public class Chunk : MonoBehaviour
             {
                 // Get the perlin value of a vertex touching this pixel
 				float yValue = PerlinNoise.getHeightTest(transform.position.x + xPosition, transform.position.z + zPosition);
+                float moisture = PerlinNoise.getMoisture(transform.position.x + xPosition, transform.position.z + zPosition);
                 // Set color based on perlin value
-				chunkTexture.SetPixel(x, z, Color.Lerp(testLowColor, testHighColor, yValue));
+				// chunkTexture.SetPixel(x, z, Color.Lerp(testLowColor, testHighColor, yValue));
+
+                // moisture is a value between [0, 1]
+                // scale it to [-1.5, 3.5] for clamped lerp
+                // height is a value between [-maxHeight, maxHeight]
+                // set threshold for altitude at 15 units
+                float scaledHeight = (yValue - 15.0f) / 5.0f;
+                float scaledMoisture = moisture * 5 - 2.5f + 1;
+                chunkTexture.SetPixel(x, z, Color.Lerp(
+                    Color.Lerp(desertColor, grassColor, scaledMoisture),
+                    Color.Lerp(rockColor, snowColor, scaledMoisture),
+                scaledHeight));
+
 
 				xPosition += vertexSpace;
             }
