@@ -150,6 +150,7 @@ public class Chunk : MonoBehaviour
         //// Populate chunkTexture pixels
 		float xPosition = 0;
         float zPosition = 0;
+        float maxv = 0, minv = 0;
 		for (int z = 0; z < vertexDensity - 1; z++)
         {
             for (int x = 0; x < vertexDensity - 1; x++)
@@ -161,15 +162,30 @@ public class Chunk : MonoBehaviour
 				// chunkTexture.SetPixel(x, z, Color.Lerp(testLowColor, testHighColor, yValue));
 
                 // moisture is a value between [0, 1]
-                // scale it to [-1.5, 3.5] for clamped lerp
+                // scale it to [-1.5, 2.5] for clamped lerp
                 // height is a value between [-maxHeight, maxHeight]
                 // set threshold for altitude at 15 units
-                float scaledHeight = (yValue - 15.0f) / 5.0f;
-                float scaledMoisture = moisture * 5 - 2.5f + 1;
+                float scaledHeight = (yValue - 10.0f) / 5.0f;
+                float scaledMoisture = moisture * 4 - 1.5f;
                 chunkTexture.SetPixel(x, z, Color.Lerp(
                     Color.Lerp(desertColor, grassColor, scaledMoisture),
                     Color.Lerp(rockColor, snowColor, scaledMoisture),
                 scaledHeight));
+                
+                // int tree = PerlinNoise.getTreeType(transform.position.x + xPosition, transform.position.z + zPosition);
+                // Color c = new Color(0.0f, 0.0f, 0.0f);
+                // if(x % 5 == 0 && z % 5 == 0){
+                //     maxv = Mathf.Max(maxv, yValue);
+                //     minv = Mathf.Min(minv, yValue);
+                //     if(tree == PerlinNoise.PALM_TREE){
+                //         c = desertColor;
+                //     }else if(tree == PerlinNoise.NORMAL_TREE){
+                //         c = grassColor;
+                //     }else if(tree == PerlinNoise.SNOW_TREE){
+                //         c = snowColor;
+                //     }
+                // }
+                // chunkTexture.SetPixel(x, z, c);
 
 
 				xPosition += vertexSpace;
