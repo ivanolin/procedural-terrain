@@ -9,45 +9,73 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1040642303460906}
+  m_RootGameObject: {fileID: 1079490979382440}
   m_IsPrefabAsset: 1
---- !u!1 &1040642303460906
+--- !u!1 &1079490979382440
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4287684648290438}
-  - component: {fileID: 33498244544112468}
-  - component: {fileID: 23376169844705834}
-  - component: {fileID: 114698183483174896}
+  - component: {fileID: 4549955217646726}
   m_Layer: 0
-  m_Name: Chunk
+  m_Name: Snow Tree
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4287684648290438
+--- !u!1 &1443431014349436
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4578560770360394}
+  - component: {fileID: 33729486781380812}
+  - component: {fileID: 23100999849148524}
+  m_Layer: 0
+  m_Name: treePineSnow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4549955217646726
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1040642303460906}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_GameObject: {fileID: 1079490979382440}
+  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.1746915, y: 2.7971551, z: 5.7253947}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
+  m_Children:
+  - {fileID: 4578560770360394}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!23 &23376169844705834
+--- !u!4 &4578560770360394
+Transform:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1443431014349436}
+  m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0, y: -0.79, z: 0}
+  m_LocalScale: {x: 3, y: 3, z: 3}
+  m_Children: []
+  m_Father: {fileID: 4549955217646726}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!23 &23100999849148524
 MeshRenderer:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1040642303460906}
+  m_GameObject: {fileID: 1443431014349436}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -57,7 +85,9 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: 9bbfe8d8f5cc4444a80e253a37b750f6, type: 2}
+  - {fileID: 2100000, guid: 8869b91aa7abae04f9d18ad6dda5e101, type: 3}
+  - {fileID: 2100002, guid: 8869b91aa7abae04f9d18ad6dda5e101, type: 3}
+  - {fileID: 2100004, guid: 8869b91aa7abae04f9d18ad6dda5e101, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -77,29 +107,10 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!33 &33498244544112468
+--- !u!33 &33729486781380812
 MeshFilter:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1040642303460906}
-  m_Mesh: {fileID: 0}
---- !u!114 &114698183483174896
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1040642303460906}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a59e54d21c2c4380ae0e923904e98a2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  testSideLength: 100
-  testDensity: 50
-  testLowColor: {r: 0.5377358, g: 0.39461654, b: 0.09385012, a: 1}
-  testHighColor: {r: 1, g: 1, b: 1, a: 1}
-  desertColor: {r: 0.8207547, g: 0.7243348, b: 0.26713243, a: 1}
-  snowColor: {r: 0.9032574, g: 0.9610843, b: 0.9622642, a: 1}
-  grassColor: {r: 0.33837146, g: 0.5754717, b: 0.1764418, a: 1}
-  rockColor: {r: 0.31132078, g: 0.21172424, b: 0.15125492, a: 1}
+  m_GameObject: {fileID: 1443431014349436}
+  m_Mesh: {fileID: 4300000, guid: 8869b91aa7abae04f9d18ad6dda5e101, type: 3}

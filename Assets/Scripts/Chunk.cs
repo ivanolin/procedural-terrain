@@ -10,13 +10,27 @@ public class Chunk : MonoBehaviour
     ///////////
     public float testSideLength;
     public int testDensity;
-	public Color testLowColor;
-	public Color testHighColor;
+
+    ///////////
+    // Trees //
+    ///////////
+    public GameObject treePrefab;
+    public GameObject snowTreePrefab;
+    public GameObject desertTreePrefab;
+
+    private Coroutine loadingTrees;
+
+    ///////////
+    // Color //
+    ///////////
     public Color desertColor;
     public Color snowColor;
     public Color grassColor;
     public Color rockColor;
 
+    //////////
+    // Mesh //
+    //////////
     private Mesh HighDetailMesh;
     private Mesh LowDetailMesh;
 
@@ -38,11 +52,18 @@ public class Chunk : MonoBehaviour
         if(high)
         {
             GetComponent<MeshFilter>().mesh = HighDetailMesh;
+            loadingTrees = StartCoroutine(LoadTrees(testSideLength, testDensity));
         }
         else
         {
             GetComponent<MeshFilter>().mesh = LowDetailMesh;
+            UnloadTrees();
         }
+    }
+
+    void OnDestroy()
+    {
+        UnloadTrees();
     }
 
     /**
@@ -82,7 +103,7 @@ public class Chunk : MonoBehaviour
                 //// Add the current point to vertex data
                 // Get the height value from perlin based on the GLOBAL position of the vertex to add
                 float moisture = PerlinNoise.getMoisture(transform.position.x + xPosition, transform.position.z + zPosition);
-				yPosition = PerlinNoise.getHeightTest(transform.position.x + xPosition, transform.position.z + zPosition) * 2.0f;
+				yPosition = PerlinNoise.getHeightTest(transform.position.x + xPosition, transform.position.z + zPosition);
                 vertices[verticesIndex] = new Vector3(xPosition, yPosition, zPosition);
                 uvs[verticesIndex] = new Vector2(xPosition / sideLength, zPosition / sideLength);
 
@@ -150,7 +171,6 @@ public class Chunk : MonoBehaviour
         //// Populate chunkTexture pixels
 		float xPosition = 0;
         float zPosition = 0;
-        float maxv = 0, minv = 0;
 		for (int z = 0; z < vertexDensity - 1; z++)
         {
             for (int x = 0; x < vertexDensity - 1; x++)
@@ -162,30 +182,15 @@ public class Chunk : MonoBehaviour
 				// chunkTexture.SetPixel(x, z, Color.Lerp(testLowColor, testHighColor, yValue));
 
                 // moisture is a value between [0, 1]
-                // scale it to [-1.5, 2.5] for clamped lerp
+                // scale it to [-1.5, 3.5] for clamped lerp
                 // height is a value between [-maxHeight, maxHeight]
                 // set threshold for altitude at 15 units
-                float scaledHeight = (yValue - 10.0f) / 5.0f;
-                float scaledMoisture = moisture * 4 - 1.5f;
+                float scaledHeight = (yValue - 15.0f) / 5.0f;
+                float scaledMoisture = moisture * 5 - 2.5f + 1;
                 chunkTexture.SetPixel(x, z, Color.Lerp(
                     Color.Lerp(desertColor, grassColor, scaledMoisture),
                     Color.Lerp(rockColor, snowColor, scaledMoisture),
                 scaledHeight));
-                
-                // int tree = PerlinNoise.getTreeType(transform.position.x + xPosition, transform.position.z + zPosition);
-                // Color c = new Color(0.0f, 0.0f, 0.0f);
-                // if(x % 5 == 0 && z % 5 == 0){
-                //     maxv = Mathf.Max(maxv, yValue);
-                //     minv = Mathf.Min(minv, yValue);
-                //     if(tree == PerlinNoise.PALM_TREE){
-                //         c = desertColor;
-                //     }else if(tree == PerlinNoise.NORMAL_TREE){
-                //         c = grassColor;
-                //     }else if(tree == PerlinNoise.SNOW_TREE){
-                //         c = snowColor;
-                //     }
-                // }
-                // chunkTexture.SetPixel(x, z, c);
 
 
 				xPosition += vertexSpace;
@@ -207,4 +212,63 @@ public class Chunk : MonoBehaviour
         return chunkTexture;
     }
 
+    IEnumerator LoadTrees(float sideLength, int vertexDensity)
+    {
+
+        // Vertex spacing is needed to predict perlin values
+		float vertexSpace = sideLength / (vertexDensity - 1);
+
+        //// Populate chunkTexture pixels
+		float xPosition = 0;
+        float zPosition = 0;
+		for (int z = 0; z < vertexDensity - 1; z++)
+        {
+            for (int x = 0; x < vertexDensity - 1; x++)
+            {
+                // Get the perlin value of a vertex touching this pixel
+                if(LoadTree(transform.position.x + xPosition, transform.position.z + zPosition))
+                {
+                    yield return new WaitForEndOfFrame();
+                }
+				xPosition += vertexSpace;
+            }
+			xPosition = 0;
+			zPosition += vertexSpace;
+        }
+    }
+
+    void UnloadTrees()
+    {
+        StopAllCoroutines();
+        
+        foreach (Transform child in transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+    }
+
+    bool LoadTree(float x, float z)
+    {
+        PerlinNoise.TreeType type = PerlinNoise.getTreeType(x, z);
+        GameObject newTree = null;
+
+        switch(type)
+        {
+            case PerlinNoise.TreeType.NO_TREE:
+                return false; // Do nothing
+            case PerlinNoise.TreeType.NORMAL_TREE:
+                newTree = GameObject.Instantiate(treePrefab);
+                break;
+            case PerlinNoise.TreeType.DESERT_TREE:
+                newTree = GameObject.Instantiate(desertTreePrefab);
+                break;
+            case PerlinNoise.TreeType.SNOW_TREE:
+                newTree = GameObject.Instantiate(snowTreePrefab);
+                break;
+        }
+
+        newTree.transform.position = new Vector3(x, PerlinNoise.getHeightTest(x, z), z);
+        newTree.transform.parent = gameObject.transform;
+        return true;
+    }
 }

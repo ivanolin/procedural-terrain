@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class PerlinNoise {
 
-    public const int PALM_TREE = 1;
-    public const int SNOW_TREE = 2;
-    public const int NORMAL_TREE = 3;
 
-    public static int getTreeType(float x, float z) {
+    public enum TreeType
+    {
+        NO_TREE,
+        NORMAL_TREE,
+        DESERT_TREE,
+        SNOW_TREE
+    }
+
+    public static TreeType getTreeType(float x, float z) {
         float height = getHeightTest(x, z);
         float moisture = getMoisture(x, z);
         int xr = (int)Mathf.Round(x);
@@ -23,20 +28,20 @@ public class PerlinNoise {
             Mathf.SmoothStep(0.0f, 1.0f, getHeight(x/64.0f, z/64.0f) / 2.0f + 0.5f)); // tend to put trees at local maximum
         
         if(rand >  threshold) {
-            return 0;
+            return TreeType.NO_TREE;
         }
 
         if (moisture < 0.5f){
             if(height < 12.5f){
-                return PALM_TREE;
+                return TreeType.DESERT_TREE;
             } else {
                 return 0;
             }
         } else {
             if(height < 12.5f){
-                return NORMAL_TREE;
+                return TreeType.NORMAL_TREE;
             } else {
-                return SNOW_TREE;
+                return TreeType.SNOW_TREE;
             }
         }
     }

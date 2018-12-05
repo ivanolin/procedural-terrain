@@ -22,7 +22,8 @@ public class ChunkManager : MonoBehaviour {
 		loadedChunks = new Dictionary<Vector2Int, GameObject>();
 
 		UpdateCurrentPosition();
-		LoadChunks();
+		StopAllCoroutines();
+		StartCoroutine(LoadChunks());
 	}
 	
 	// Update is called once per frame
@@ -40,19 +41,20 @@ public class ChunkManager : MonoBehaviour {
 		{
 			loadDirection = currentPosition - updatedPosition;
 			currentPosition = updatedPosition;
-			LoadChunks();
+			StartCoroutine(LoadChunks());
 			UnloadChunks();
 		}
 		currentPosition = updatedPosition;
 	}
 
-	void LoadChunks()
+	IEnumerator LoadChunks()
 	{
 		for(int z = currentPosition.y - loadDistance; z <= currentPosition.y + loadDistance; z++)
 		{
 			for(int x = currentPosition.x - loadDistance; x <= currentPosition.x + loadDistance; x++)
 			{
 				LoadChunk(x,z);
+				yield return new WaitForEndOfFrame();
 			}
 		}
 	}
@@ -116,23 +118,10 @@ public class ChunkManager : MonoBehaviour {
 
 		foreach(Vector2Int chunkKey in keysToRemove)
 		{
-			print("DELETING CHUNK: " + chunkKey.x +" "+ chunkKey.y);
 			GameObject toUnload = loadedChunks[chunkKey];
 			loadedChunks.Remove(chunkKey);
 
 			GameObject.Destroy(toUnload);
 		}
 	}
-
-	// void UnloadChunk(Vector2Int chunkKey)
-	// {
-	// 	//print("UNLOADED CHUNK: "+x+" "+z);
-	// 	GameObject toUnload = loadedChunks[chunkKey];
-	// 	loadedChunks.Remove(chunkKey);
-
-	// 	GameObject.Destroy(toUnload);
-
-	// }
-
-
 }
