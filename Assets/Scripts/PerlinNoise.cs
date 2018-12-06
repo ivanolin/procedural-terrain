@@ -13,8 +13,11 @@ public class PerlinNoise {
         SNOW_TREE
     }
 
-    public static TreeType getTreeType(float x, float z) {
+    public static TreeType getTreeType(float x, float z, float waterLevel) {
         float height = getHeightTest(x, z);
+        if (height < waterLevel){
+            return TreeType.NO_TREE;
+        }
         float moisture = getMoisture(x, z);
         int xr = (int)Mathf.Round(x);
         int zr = (int)Mathf.Round(z);

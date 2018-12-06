@@ -106,3 +106,6 @@ MonoBehaviour:
   snowColor: {r: 0.9032574, g: 0.9610843, b: 0.9622642, a: 1}
   grassColor: {r: 0.33837146, g: 0.5754717, b: 0.1764418, a: 1}
   rockColor: {r: 0.31132078, g: 0.21172424, b: 0.15125492, a: 1}
+  WaterPrefab: {fileID: 100000, guid: 9485b0c79d11e2e4d0007da98d76c639, type: 2}
+  WaterPlane: {fileID: 0}
+  waterLevel: 0

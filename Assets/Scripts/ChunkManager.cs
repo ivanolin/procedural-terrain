@@ -18,7 +18,6 @@ public class ChunkManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-
 		loadedChunks = new Dictionary<Vector2Int, GameObject>();
 
 		UpdateCurrentPosition();
@@ -72,8 +71,10 @@ public class ChunkManager : MonoBehaviour {
 		else
 		{
 			chunkToLoad = GameObject.Instantiate(chunkPrefab);
-			chunkToLoad.transform.position = new Vector3(x*chunkSideLength, 0, z*chunkSideLength);
-			chunkToLoad.GetComponent<Chunk>().Load();
+			Vector3 position = new Vector3(x*chunkSideLength, 0, z*chunkSideLength);
+			chunkToLoad.transform.position = position;
+			chunkToLoad.GetComponent<Chunk>().LoadTerrain();
+			chunkToLoad.GetComponent<Chunk>().LoadWater(position);
 			chunkToLoad.name = "CHUNK [" + x + ", " + z + "]";
 
 			loadedChunks.Add(chunkKey, chunkToLoad);
