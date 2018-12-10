@@ -74,7 +74,6 @@ public class ChunkManager : MonoBehaviour {
 			Vector3 position = new Vector3(x*chunkSideLength, 0, z*chunkSideLength);
 			chunkToLoad.transform.position = position;
 			chunkToLoad.GetComponent<Chunk>().LoadTerrain();
-			chunkToLoad.GetComponent<Chunk>().LoadWater(position);
 			chunkToLoad.name = "CHUNK [" + x + ", " + z + "]";
 
 			loadedChunks.Add(chunkKey, chunkToLoad);

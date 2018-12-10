@@ -52,19 +52,17 @@ public class Chunk : MonoBehaviour
         GetComponent<MeshFilter>().mesh = LowDetailMesh;
         GetComponent<MeshRenderer>().material.mainTexture = GenerateChunkTexture(testSideLength, testDensity);
         gameObject.AddComponent<MeshCollider>();
+
+        LoadWater();
     }
 
-    public void LoadWater(Vector3 pos){
+    public void LoadWater(){
         WaterPlane = GameObject.Instantiate(WaterPrefab);
         //WaterPlane.AddComponent<MeshFilter>();
-        Mesh WaterMesh = GenerateChunkMesh(testSideLength, testDensity/4, false);
-        WaterPlane.GetComponent<MeshFilter>().mesh = WaterMesh;
-        WaterPlane.transform.position = pos;
-        WaterPlane.AddComponent<MeshCollider>();
-    }
-
-    private void UnloadWater(){
-        GameObject.Destroy(WaterPlane);
+        //Mesh WaterMesh = GenerateChunkMesh(testSideLength, testDensity/4, false);
+        //WaterPlane.GetComponent<MeshFilter>().mesh = WaterMesh;
+        WaterPlane.transform.parent = transform;
+        WaterPlane.transform.localPosition = new Vector3(testSideLength/2, 0, testSideLength/2);
     }
 
     public void SetLOD(bool high)
@@ -72,19 +70,19 @@ public class Chunk : MonoBehaviour
         if(high)
         {
             GetComponent<MeshFilter>().mesh = HighDetailMesh;
+            LoadWater();
             loadingTrees = StartCoroutine(LoadTrees(testSideLength, testDensity));
         }
         else
         {
             GetComponent<MeshFilter>().mesh = LowDetailMesh;
-            UnloadTrees();
+            UnloadChildren();
         }
     }
 
     void OnDestroy()
     {
-        UnloadWater();
-        UnloadTrees();
+        UnloadChildren();
     }
 
     /**
@@ -261,7 +259,7 @@ public class Chunk : MonoBehaviour
         }
     }
 
-    void UnloadTrees()
+    void UnloadChildren()
     {
         StopAllCoroutines();
         
