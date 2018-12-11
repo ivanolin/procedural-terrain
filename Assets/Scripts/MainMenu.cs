@@ -5,6 +5,15 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour {
 
+    void Start(){
+        //Unlock cursor
+        if ( Cursor.lockState == CursorLockMode.Locked){
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+
+    }
+
 	public void PlayGame(){
 		StartCoroutine(LoadScene("MainGame"));
 	}
