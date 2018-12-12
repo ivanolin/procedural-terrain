@@ -26,7 +26,7 @@ public class PerlinNoise {
         float rand = Random.Range(0.0f, 1.0f);
 
         float threshold = (
-            0.25f * // base threshold, 1/4
+            0.1f * // base threshold, 1/4
             Mathf.SmoothStep(0.0f, 1.0f, moisture) * // Make moister climates have more vegetation
             Mathf.SmoothStep(0.0f, 1.0f, getHeight(x/64.0f, z/64.0f) / 2.0f + 0.5f)); // tend to put trees at local maximum
         
