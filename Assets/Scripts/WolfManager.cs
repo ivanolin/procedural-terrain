@@ -25,7 +25,7 @@ public class WolfManager : MonoBehaviour
         int toSpawn = minSpawn;
         while (true)
         {
-            //yield return new WaitForSeconds(waveGap);
+            yield return new WaitForSeconds(waveGap);
 
 			howl.Play();
 
@@ -34,9 +34,9 @@ public class WolfManager : MonoBehaviour
 			{
 				GameObject newWolf = GameObject.Instantiate(wolfPrefab);
 				newWolf.transform.position = new Vector3(
-					playerPosition.x + Random.Range(0,2) == 1 ? 100 : -100, 
-					100,
-					playerPosition.z +Random.Range(0,2) == 1 ? 100 : -100);
+					playerPosition.x + (Random.Range(0,2) == 1 ? 100 : -100), 
+					200,
+					playerPosition.z + (Random.Range(0,2) == 1 ? 100 : -100));
 				yield return new WaitForSeconds(Random.Range(0, 1.5f));
 			}
 
@@ -45,7 +45,7 @@ public class WolfManager : MonoBehaviour
 				toSpawn += 1;
 			}
 
-            yield return new WaitForSeconds(waveGap);
+            //yield return new WaitForSeconds(waveGap);
         }
     }
 

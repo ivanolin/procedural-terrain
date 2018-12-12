@@ -39,6 +39,9 @@ public class Wolf : MonoBehaviour
         // Look at player
         transform.LookAt(player.transform);
         transform.Rotate(-90, 0, 0);
+
+        if(fleeing)
+            transform.Rotate(0, 0, 180);
     }
 
     private void Pursue()
@@ -67,7 +70,7 @@ public class Wolf : MonoBehaviour
 	{
 		GetComponent<MeshRenderer>().enabled = false;
 		GetComponent<AudioSource>().Stop();
-		yield return new WaitForSeconds(4);
+		yield return new WaitForSeconds(8);
 		activated = true;
 		GetComponent<MeshRenderer>().enabled = true;
 		GetComponent<AudioSource>().Play();

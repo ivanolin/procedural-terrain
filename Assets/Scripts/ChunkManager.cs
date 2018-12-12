@@ -84,7 +84,7 @@ public class ChunkManager : MonoBehaviour {
 
 		if(localX >= lodCutoff || localZ >= lodCutoff)
 		{
-			// Debuge
+			// Debug
 			chunkToLoad.name = "CHUNK [" + x + ", " + z + "] (LOW LOD)";
 			chunkToLoad.GetComponent<Chunk>().SetLOD(false);
 		}

@@ -38,16 +38,15 @@ public class Chunk : MonoBehaviour
     // Water //
     ///////////
     public GameObject WaterPrefab; 
-    public GameObject WaterPlane;
+    private GameObject WaterPlane;
     public float waterLevel;  
 
 
     // Use this for testing
     public void LoadTerrain()
     {
-        //GetComponent<MeshFilter>().mesh = GenerateChunkMesh(testSideLength, testDensity);
-        HighDetailMesh = GenerateChunkMesh(testSideLength, testDensity, true);
-        LowDetailMesh = GenerateChunkMesh(testSideLength, testDensity/4, true);
+        HighDetailMesh = GenerateChunkMesh(testSideLength, testDensity);
+        LowDetailMesh = GenerateChunkMesh(testSideLength, testDensity/4);
 
         GetComponent<MeshFilter>().mesh = LowDetailMesh;
         GetComponent<MeshRenderer>().material.mainTexture = GenerateChunkTexture(testSideLength, testDensity);
@@ -58,11 +57,9 @@ public class Chunk : MonoBehaviour
 
     public void LoadWater(){
         WaterPlane = GameObject.Instantiate(WaterPrefab);
-        //WaterPlane.AddComponent<MeshFilter>();
-        //Mesh WaterMesh = GenerateChunkMesh(testSideLength, testDensity/4, false);
-        //WaterPlane.GetComponent<MeshFilter>().mesh = WaterMesh;
         WaterPlane.transform.parent = transform;
         WaterPlane.transform.localPosition = new Vector3(testSideLength/2, 0, testSideLength/2);
+        WaterPlane.transform.parent = null;
     }
 
     public void SetLOD(bool high)
@@ -70,7 +67,6 @@ public class Chunk : MonoBehaviour
         if(high)
         {
             GetComponent<MeshFilter>().mesh = HighDetailMesh;
-            LoadWater();
             loadingTrees = StartCoroutine(LoadTrees(testSideLength, testDensity));
         }
         else
@@ -83,6 +79,7 @@ public class Chunk : MonoBehaviour
     void OnDestroy()
     {
         UnloadChildren();
+        GameObject.Destroy(WaterPlane);
     }
 
     /**
@@ -90,7 +87,7 @@ public class Chunk : MonoBehaviour
      * @param vertexDensity the number of vertices in a single row (totalVertices = vertexDensity^2)
      * @return a chunk mesh with perlin noise applied to the height of its vertices based on their GLOBAL position
      */
-    Mesh GenerateChunkMesh(float sideLength, int vertexDensity, bool perlin)
+    Mesh GenerateChunkMesh(float sideLength, int vertexDensity)
     {
         //// Precalculate some useful values
         // How to space the vertices to achieve the desired side length
@@ -122,10 +119,10 @@ public class Chunk : MonoBehaviour
                 //// Add the current point to vertex data
                 // Get the height value from perlin based on the GLOBAL position of the vertex to add
 
-                if (perlin){
-                    float moisture = PerlinNoise.getMoisture(transform.position.x + xPosition, transform.position.z + zPosition);
-				    yPosition = PerlinNoise.getHeightTest(transform.position.x + xPosition, transform.position.z + zPosition);
-                } 
+
+                float moisture = PerlinNoise.getMoisture(transform.position.x + xPosition, transform.position.z + zPosition);
+				yPosition = PerlinNoise.getHeightTest(transform.position.x + xPosition, transform.position.z + zPosition);
+
                 vertices[verticesIndex] = new Vector3(xPosition, yPosition, zPosition);
                 uvs[verticesIndex] = new Vector2(xPosition / sideLength, zPosition / sideLength);
 
