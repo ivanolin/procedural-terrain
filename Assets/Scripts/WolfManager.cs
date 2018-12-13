@@ -21,11 +21,11 @@ public class WolfManager : MonoBehaviour
 
     IEnumerator SpawnWaves()
     {
+        yield return new WaitForSeconds(waveGap/2);
 
         int toSpawn = minSpawn;
         while (true)
         {
-            yield return new WaitForSeconds(waveGap);
 
 			howl.Play();
 
@@ -45,7 +45,12 @@ public class WolfManager : MonoBehaviour
 				toSpawn += 1;
 			}
 
-            //yield return new WaitForSeconds(waveGap);
+            if(waveGap > 10)
+            {
+                waveGap -= 3;
+            }
+
+            yield return new WaitForSeconds(waveGap);
         }
     }
 

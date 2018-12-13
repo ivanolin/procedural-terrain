@@ -14,9 +14,12 @@ public class Wolf : MonoBehaviour
     private bool fleeing = false;
     private bool activated = false;
 
+    private List <GameObject> currentCollisions;
+
     // Use this for initialization
     void Start()
     {
+        currentCollisions = new List <GameObject> ();
 		player = GameObject.FindWithTag("Player");
         StartCoroutine(Activate());
     }
