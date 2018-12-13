@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Perlin : MonoBehaviour {
 
-	// Use this for initialization
+	// Debug class for PerlinNoise
 	void Start () {
 
 		GameObject obj = GameObject.Find("Terrain");

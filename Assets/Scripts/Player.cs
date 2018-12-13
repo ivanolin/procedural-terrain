@@ -58,8 +58,7 @@ public class Player : MonoBehaviour {
                             print(tran.name);
                             foreach (Material mat in tran.gameObject.GetComponent<Renderer>().materials)
                             {
-                                print(mat.color);
-                             
+                                print(mat.color);                             
                                 mat.color = Color.grey;
                                 print("grey");
                                 print(mat.color);
